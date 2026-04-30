@@ -72,24 +72,72 @@ docker compose up -d
 > Например, при изменении URI Path на `/my-secret-panel-path/` панель будет доступна только по адресу [https://panel.example.com/my-secret-panel-path/](https://panel.example.com/my-secret-panel-path/)
 
 ### 7. Добавьте inbound в панели 3x-ui
-
-При добавлении inbound настройте следующие обязательные параметры:
-
-- **Protocol:** vless
-- **Port:** 443
-- **Proxy Protocol:** Enabled
-- **External Proxy:** cloud.example.com:443
-- **Security:** Reality
-- **Xver:** 2
-- **Dest (Target):** angie:2443
-- **SNI:** cloud.example.com
-
-![inbound](https://github.com/user-attachments/assets/dd85f07f-e627-4d88-b5b8-e918419e67e2)
+inbound уже добавлен, все что остается, изменить некоторый параметры:
+- **External Proxy:** cloud.example.com:443 изменить на свой домен
+- **SNI:** cloud.example.com изменить на свой домен
+- **Short IDs:** сгенерировать short id
+- **Public and private key:** сгенерировать публичный и приватный ключи
+Также уже создан тестовый клиент, у него можно обновить **id** и **subscription**.
 
 ### 8. Подписка
-
+По желанию можно изменить корневой путь подписки. Он должен быть формата /sub(тут любой ваш текст)/
+Например, /sub-dss-hksdh/
 Для корректной работоспособности подписок 3x-ui, необходимо перейти в **Panel Settings -> Subscription** и настроить `Reverse Proxy URI` следующим образом:
 
 <img width="863" height="69" alt="image" src="https://github.com/user-attachments/assets/d5356e6c-6994-4767-8a8d-a07f64183cf4" />
 
-Не забудьте заменить `panel.example.com` на свой поддомен.
+### 9. WARP
+По умолчанию в панели настроен warp и через него идет весь трафик.Это можно изменить, зайдя в Настройки Xray - Исходящие подключения и выставив direct первым. Также можно настроить маршрутизацию зайдя в Расширенный шаблон - Маршрутизация.
+Пример маршрутизации (все через warp, за исключением определенных сайтов):
+```json
+[
+  {
+    "type": "field",
+    "inboundTag": [
+      "api"
+    ],
+    "outboundTag": "api"
+  },
+  {
+    "type": "field",
+    "outboundTag": "blocked",
+    "ip": [
+      "geoip:private"
+    ]
+  },
+  {
+    "type": "field",
+    "outboundTag": "blocked",
+    "protocol": [
+      "bittorrent"
+    ]
+  },
+  {
+    "type": "field",
+    "domain": [
+      "geosite:youtube",
+      "geosite:meta",
+      "geosite:telegram",
+      "cp.cloudflare.com",
+      "one.one.one.one",
+      "speedtest.net"
+    ],
+    "outboundTag": "direct"
+  },
+  {
+    "type": "field",
+    "ip": [
+      "91.108.56.0/22",
+      "91.108.4.0/22",
+      "91.108.8.0/22",
+      "91.108.16.0/22",
+      "91.108.12.0/22",
+      "149.154.160.0/20",
+      "91.105.192.0/23",
+      "91.108.20.0/22",
+      "185.76.151.0/24"
+    ],
+    "outboundTag": "direct"
+  }
+]
+```
