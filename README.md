@@ -17,7 +17,7 @@ A-записи этих поддоменов должны содержать IP 
 ### 3. Клонируйте репозиторий
 
 ```bash
-git clone https://github.com/ampetelin/3x-ui-aio.git && cd 3x-ui-aio
+git clone https://github.com/dima-savelev/3x-ui-aio.git && cd 3x-ui-aio
 ```
 
 ### 4. Отредактируйте файл `angie.conf`
