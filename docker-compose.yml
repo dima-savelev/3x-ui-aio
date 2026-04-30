@@ -32,6 +32,16 @@ services:
     networks:
       - 3x-ui-aio-network
     restart: unless-stopped
+  warp:
+    image: ghcr.io/xxphantom/docker-warp-native:latest
+    container_name: warp-native
+    restart: always
+    network_mode: "service:3x-ui"
+    volumes:
+      - ./warp_conf:/etc/wireguard
+      - /lib/modules:/lib/modules:ro
+    cap_add:
+      - NET_ADMIN
 
 networks:
   3x-ui-aio-network:
