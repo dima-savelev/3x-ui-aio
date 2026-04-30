@@ -1,6 +1,6 @@
 services:
   angie:
-    image: docker.angie.software/angie:1.9.1
+    image: docker.angie.software/angie:latest
     container_name: angie
     ports:
       - "0.0.0.0:80:80"
